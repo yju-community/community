@@ -10,13 +10,14 @@ import { GoogleOauthGuard } from './google-oauth.guard';
 export class GoogleOauthController {
   constructor(private readonly jwtAuthService: JwtAuthService) {}
 
+  @ApiOperation({ summary: '구글 로그인 (프런트가 들어오는 곳)' })
   @Get()
   @UseGuards(GoogleOauthGuard)
   async googleAuth() {}
 
   @ApiResponse({
     status: 200,
-    description: '구글 로그인 성공',
+    description: '구글 로그인 성공, refresh cookie 보내 줌',
     type: UserDto,
   })
   @ApiOperation({ summary: '구글 로그인 후 리다이렉트' })

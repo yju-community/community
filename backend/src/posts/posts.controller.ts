@@ -1,8 +1,23 @@
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { Posts } from 'src/entities/Posts';
 import { PostsService } from './posts.service';
 
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @ApiTags('POSTS')
 @Controller('api/posts')
 export class PostsController {
@@ -12,6 +27,14 @@ export class PostsController {
     status: 200,
     description: '성공',
     type: [Posts],
+  })
+  @ApiQuery({
+    name: 'take',
+    description: 'take: 몇개 가져올지(limit)',
+  })
+  @ApiQuery({
+    name: 'skip',
+    description: 'skip: 생략(offset)',
   })
   @ApiOperation({ summary: '전체 게시물 가져오기' })
   @Get()
@@ -26,6 +49,18 @@ export class PostsController {
     status: 200,
     description: '성공',
     type: [Posts],
+  })
+  @ApiQuery({
+    name: 'category',
+    description: 'category: 카테고리 번호',
+  })
+  @ApiQuery({
+    name: 'take',
+    description: 'take: 몇개 가져올지(limit)',
+  })
+  @ApiQuery({
+    name: 'skip',
+    description: 'skip: 생략(offset)',
   })
   @ApiOperation({ summary: '카테고리 게시물 가져오기' })
   @Get('search')

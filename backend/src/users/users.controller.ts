@@ -39,6 +39,9 @@ try {
   console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
   fs.mkdirSync('uploads');
 }
+
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('USERS')
 @Controller('api/users')
 export class UsersController {
@@ -49,9 +52,7 @@ export class UsersController {
     description: '나의 게시물들 가져오기 성공',
     type: [Posts],
   })
-  @ApiBearerAuth()
   @ApiOperation({ summary: '자신의 게시물 가져오기' })
-  @UseGuards(JwtAuthGuard)
   @Get('posts')
   async getMyPosts(@User() user: UserDto) {
     return this.usersService.findPostsByUserId(user.id);
@@ -60,7 +61,7 @@ export class UsersController {
   @ApiParam({
     name: 'id',
     required: true,
-    description: '유저 번호',
+    description: '유저 아이디',
   })
   @ApiResponse({
     status: 200,
@@ -81,7 +82,7 @@ export class UsersController {
   @ApiParam({
     name: 'id',
     required: true,
-    description: '유저 번호',
+    description: '유저 아이디',
   })
   @ApiOperation({ summary: '특정 유저 게시물 가져오기' })
   @Get(':id/posts')
@@ -97,7 +98,7 @@ export class UsersController {
   @ApiParam({
     name: 'id',
     required: true,
-    description: '유저 번호',
+    description: '유저 아이디',
   })
   @ApiOperation({ summary: '특정 유저 댓글들 가져오기' })
   @Get(':id/comments')
@@ -116,7 +117,7 @@ export class UsersController {
     description: 'Formdata 이미지',
     schema: {
       example: {
-        images: 'myface.jpg',
+        image: 'myface.jpg',
       },
     },
   })
@@ -135,8 +136,6 @@ export class UsersController {
       limits: { fileSize: 5 * 1024 * 1024 },
     }),
   )
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Post('profile/image')
   uploadImage(@UploadedFile() file: Express.Multer.File) {
     return this.usersService.uploadImage(file);
@@ -148,8 +147,10 @@ export class UsersController {
     type: Users,
   })
   @ApiOperation({ summary: '프로필 등록' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @ApiBody({
+    type: ProfileDto,
+    description: '프로필',
+  })
   @Patch('profile')
   async uploadProfile(@User() user: UserDto, @Body() profile: ProfileDto) {
     return this.usersService.uploadProfile(user.id, profile);
@@ -166,8 +167,6 @@ export class UsersController {
     required: true,
   })
   @ApiOperation({ summary: '친구 등록' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Patch('friend/:id')
   async acceptFriendRequest(@Param('id') id: string, @User() user: UserDto) {
     return this.usersService.acceptFriendRequest(user.id, id);
@@ -179,8 +178,6 @@ export class UsersController {
     type: DateColumn,
   })
   @ApiOperation({ summary: '회원 탈퇴' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Delete()
   async removeUser(@User() user: UserDto) {
     return this.usersService.removeUser(user.id);
@@ -196,8 +193,6 @@ export class UsersController {
     required: true,
   })
   @ApiOperation({ summary: '친구 삭제' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Delete('friend/:id')
   async removeFriend(@Param('id') id: string, @User() user: UserDto) {
     return this.usersService.removeFriend(user.id, id);

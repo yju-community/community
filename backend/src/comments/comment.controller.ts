@@ -67,6 +67,11 @@ export class CommentController {
     required: true,
     description: '게시물 번호',
   })
+  @ApiParam({
+    name: 'commentId',
+    required: true,
+    description: '댓글 번호',
+  })
   @ApiOperation({ summary: '게시물 특정 댓글 수정' })
   @ApiBearerAuth()
   @Patch(':commentId')
@@ -82,6 +87,11 @@ export class CommentController {
     status: 200,
     description: '댓글 좋아요 성공',
     type: CommentLike,
+  })
+  @ApiParam({
+    name: 'postId',
+    required: true,
+    description: '게시물 번호',
   })
   @ApiParam({
     name: 'commentId',
@@ -102,6 +112,11 @@ export class CommentController {
     status: 200,
     description: '댓글 좋아요 삭제',
     type: DateColumn,
+  })
+  @ApiParam({
+    name: 'postId',
+    required: true,
+    description: '게시물 번호',
   })
   @ApiParam({
     name: 'commentId',
