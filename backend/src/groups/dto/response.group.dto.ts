@@ -13,14 +13,6 @@ export class ResponseGroupDto extends OmitType(Groups, []) {
             "groupId": 14,
             "userId": "118072267042802506894",
             "role": 1
-        },
-        {
-            "createdAt": "2021-08-25T00:47:03.920Z",
-            "updatedAt": "2021-08-25T00:47:03.920Z",
-            "deletedAt": null,
-            "groupId": 14,
-            "userId": "4",
-            "role": 0
         }
     ]`,
     description: '그룹 멤버',

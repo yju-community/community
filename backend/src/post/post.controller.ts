@@ -40,6 +40,8 @@ try {
   fs.mkdirSync('uploads');
 }
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiTags('POST')
 @Controller('api/post')
 export class PostController {
@@ -91,8 +93,6 @@ export class PostController {
       limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
     }),
   )
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Post('images')
   async uploadImages(@UploadedFiles() files: Express.Multer.File[]) {
     return await this.postService.uploadImages(files);
@@ -108,8 +108,6 @@ export class PostController {
   })
   @HttpCode(201)
   @ApiOperation({ summary: '게시물 등록' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Post()
   async createPost(@Body() post: RequestPostDto, @User() user: UserDto) {
     return await this.postService.createPost(post, user.id);
@@ -126,8 +124,6 @@ export class PostController {
     description: '게시물 번호',
   })
   @ApiOperation({ summary: '특정 게시물 수정' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async updatePost(
     @Param('id', ParseIntPipe) id: number,
@@ -147,8 +143,6 @@ export class PostController {
     description: '게시물 번호',
   })
   @ApiOperation({ summary: '특정 게시물 삭제' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async removePost(@Param('id', ParseIntPipe) id: number) {
     return await this.postService.removePost(id);
@@ -165,8 +159,6 @@ export class PostController {
     description: '게시물 번호',
   })
   @ApiOperation({ summary: '게시물 좋아요 등록' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Patch(':id/like')
   async addLike(@Param('id', ParseIntPipe) id: number, @User() user: UserDto) {
     return await this.postService.addLike(id, user.id);
@@ -183,8 +175,6 @@ export class PostController {
     description: '게시물 번호',
   })
   @ApiOperation({ summary: '게시물 좋아요 삭제' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Delete(':id/like')
   async removeLike(
     @Param('id', ParseIntPipe) id: number,

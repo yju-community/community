@@ -70,12 +70,7 @@ export class GroupsController {
   })
   @ApiBody({
     description: '그룹 정보',
-    schema: {
-      example: {
-        name: '2wdj',
-        categoryId: 1,
-      },
-    },
+    type: RequestGroupDto,
   })
   @ApiOperation({ summary: '그룹 생성' })
   @Post()
@@ -91,7 +86,7 @@ export class GroupsController {
   @ApiParam({
     name: 'userId',
     required: true,
-    description: '유저 아이디',
+    description: '초대할 유저 아이디',
   })
   @ApiResponse({
     status: 200,
@@ -115,7 +110,7 @@ export class GroupsController {
   @ApiParam({
     name: 'userId',
     required: true,
-    description: '유저 아이디',
+    description: '그룹장 넘길 유저 아이디',
   })
   @ApiResponse({
     status: 200,
@@ -136,11 +131,6 @@ export class GroupsController {
     status: 200,
     description: '그룹 삭제 성공',
     type: [ResponseGroupDto],
-  })
-  @ApiParam({
-    name: 'userId',
-    required: true,
-    description: '유저 아이디',
   })
   @ApiOperation({ summary: '그룹 삭제' })
   @UseGuards(GroupLeaderGuard)
@@ -180,7 +170,7 @@ export class GroupsController {
   @ApiParam({
     name: 'userId',
     required: true,
-    description: '유저 아이디',
+    description: '추방할 유저 아이디',
   })
   @ApiOperation({ summary: '그룹에서 추방' })
   @UseGuards(GroupLeaderGuard)
