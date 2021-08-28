@@ -9,14 +9,14 @@ const UserProfile = () => {
       className="flex"
     >
       <img
-        src={me.id && me.Image.src}
+        src={me && me.profileImage?.src}
         className="w-12 h-12 rounded-full mr-4"
       />
       <div>
         <p
           className="text-xl"
-        >{me.name}</p>
-        <p className="text-sm text-gray-500">{me.email}</p>
+        >{me && me.nickname}</p>
+        <p className="text-sm text-gray-500">{me && me.email}</p>
       </div>
     </div>
   );

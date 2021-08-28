@@ -6,17 +6,17 @@ import LoginBtn from '../components/login/LoginBtn';
 import InfoForm from '../components/login/InfoForm';
 
 const Login = () => {
-  const { me } = useSelector((state) => state.user);
+  const me = useSelector((state) => state.user?.me);
 
   return (
     <div
-      className="grid justify-center content-center h-screen bg-purple-400"
+      className="grid justify-center content-center h-screen"
     >
       <Head>
         <title>로그인 | MoYung</title>
       </Head>
 
-      {me.id ? <InfoForm /> : <LoginBtn />}
+      {me && me.id ? <InfoForm /> : <LoginBtn />}
     </div>
   );
 }

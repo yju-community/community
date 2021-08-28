@@ -12,7 +12,7 @@ const NameForm = memo(() => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if((me && me.name)) {
+    if((me.nickname && me.gender)) {
       Router.push('/');
     }
   }, [me]);
@@ -28,7 +28,7 @@ const NameForm = memo(() => {
     }
     dispatch({
       type: UPDATE_MY_INFO_REQUEST,
-      data: { name: userName }
+      data: { nickname: userName, gender: "1", major: 1 }
     })
   }, [userName]);
 
@@ -43,7 +43,7 @@ const NameForm = memo(() => {
           placeholder="이름을 입력하세요"
           value={userName}
           onChange={onChangeUserName}
-          className="border-2 border-white rounded-xl py-2 px-3 text-center text-white placeholder-white bg-purple-400 focus:outline-none focus:placeholder-opacity-0"
+          className="border-2 border-white rounded-xl py-2 px-3 text-center text-white placeholder-white bg-purple-600 focus:outline-none focus:placeholder-opacity-0"
         />
       </form>
       {updateMyInfoLoading && <div

@@ -6,7 +6,7 @@ import '../styles/globals.css';
 import wrapper from '../store/configureStore';
 
 const App = ({ Component }) => (
-  <div className="bg-purple-400 min-h-screen">
+  <div className="bg-purple-600 min-h-screen">
     <Head>
       <meta charSet="UTF-8" />
       <title>MoYung</title>
