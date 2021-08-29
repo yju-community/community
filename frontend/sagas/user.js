@@ -34,7 +34,7 @@ function loadMyInfoApi() {
 function* loadMyInfo() {
   try {
     const result = yield call(loadMyInfoApi);
-    // console.log('sagas/user/loadMyInfo', result);
+    console.log('sagas/user/loadMyInfo', result);
     
     axios.interceptors.request.use(
       config => {
@@ -53,7 +53,7 @@ function* loadMyInfo() {
     console.error(err);
     yield put({
       type: LOAD_MY_INFO_FAILURE,
-      error: err.response.data,
+      error: null,
     });
   }
 }

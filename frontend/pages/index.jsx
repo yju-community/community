@@ -17,9 +17,9 @@ const Home = () => {
     // dispatch({
     //   type: LOAD_MY_INFO_REQUEST,
     // });
-    if(!me.nickname || !me.gender) {
-      router.push('/login');
-    }
+    // if(!me.nickname || !me.gender) {
+    //   router.push('/login');
+    // }
   }, []);
 
   return (
@@ -43,9 +43,9 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   store.dispatch({
     type: LOAD_MY_INFO_REQUEST,
   });
-  // store.dispatch(END);
-  // await store.sagaTask.toPromise();
-  console.log('server side', context.req.headers)
+  store.dispatch(END);
+  await store.sagaTask.toPromise();
+  // console.log('server side', context.req.headers)
 });
 
 export default Home;
