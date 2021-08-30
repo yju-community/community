@@ -6,8 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GroupMembers } from 'src/entities/GroupMembers';
-import { Groups } from 'src/entities/Groups';
 import { RoomMembers } from 'src/entities/RoomMembers';
 import { Rooms } from 'src/entities/Rooms';
 import { Repository } from 'typeorm';

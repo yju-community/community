@@ -26,8 +26,6 @@ import * as ormconfig from '../ormconfig';
     TypeOrmModule.forRoot(ormconfig),
     PostModule,
     GroupsModule,
-    CommentsModule,
-    PostsModule,
     RoomsModule,
     DmsModule,
     EventsModule,

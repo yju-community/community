@@ -22,7 +22,7 @@ export class GoogleOauthController {
   })
   @ApiOperation({ summary: '구글 로그인 후 리다이렉트' })
   @UseGuards(GoogleOauthGuard)
-  @Redirect('http://localhost:3060/login/refresh')
+  @Redirect(process.env.REDIRECT)
   @Get('redirect')
   async googleAuthRedirect(@Req() req: RequestWithUser) {
     const refreshTokenCookie = this.jwtAuthService.getCookieWithJwtRefreshToken(

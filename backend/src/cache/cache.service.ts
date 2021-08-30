@@ -4,11 +4,13 @@ import { Cache } from 'cache-manager';
 export class CacheService {
   constructor(@Inject(CACHE_MANAGER) private readonly cache: Cache) {}
   async get(key: string) {
+    console.log('1');
     // cache server에서 key에 해당하는 value를 가져옵니다.
     return await this.cache.get(key);
   }
   async set(key: string, value: any) {
+    console.log('2');
     // cache server에 key-value 형태로 데이터를 저장합니다.
-    await this.cache.set(key, value);
+    return await this.cache.set(key, value);
   }
 }

@@ -25,7 +25,7 @@ export class PostsService {
       .select(
         'posts.id, posts.title, posts.content, posts.status, posts.categoryId, posts.userId, posts.categoryId, posts.createdAt, posts.updatedAt, posts.deletedAt , COUNT(*) AS commentCount',
       )
-      .leftJoin('posts.PostComments', 'c')
+      .leftJoin('posts.Comments', 'c')
       .where('posts.status = :status', { status: 1 })
       .groupBy('posts.id')
       .orderBy('created_at', 'ASC')
@@ -40,7 +40,7 @@ export class PostsService {
       .select(
         'posts.id, posts.title, posts.content, posts.status, posts.categoryId, posts.userId, posts.categoryId, posts.createdAt, posts.updatedAt, posts.deletedAt , COUNT(*) AS commentCount',
       )
-      .leftJoin('posts.PostComments', 'c')
+      .leftJoin('posts.Comments', 'c')
       .where('posts.category_id = :categoryId', { categoryId })
       .andWhere('posts.status = :status', { status: 1 })
       .groupBy('posts.id')
