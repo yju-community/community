@@ -20,6 +20,7 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { User } from 'src/common/decorators/user.decorator';
 import { UserDto } from 'src/common/dto/user.dto';
 import { CommentLike } from 'src/entities/CommentLike';
+import { Comments } from 'src/entities/Comments';
 import DateColumn from 'src/entities/DateColumn';
 import { CommentService } from './comment.service';
 import { RequestCommentDto } from './dto/request.comment.dto';
@@ -33,6 +34,7 @@ export class CommentController {
   @ApiResponse({
     status: 201,
     description: '댓글 등록 성공',
+    type: Comments,
   })
   @ApiBody({
     description: '댓글 정보',
@@ -57,6 +59,7 @@ export class CommentController {
   @ApiResponse({
     status: 200,
     description: '댓글 수정 성공',
+    type: Comments,
   })
   @ApiBody({
     description: '댓글 정보',

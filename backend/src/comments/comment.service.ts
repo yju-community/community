@@ -18,16 +18,27 @@ export class CommentService {
     private commentLikeRepository: Repository<CommentLike>,
   ) {}
 
-  async findAllByPostId(postId: number) {
-    const comments = this.commentsRepository.find({
-      where: {
-        postId,
-      },
-    });
-    if (!comments) {
-      throw new NotFoundException('댓글을 찾지 못했습니다.');
-    }
-    return comments;
+  async findCommentsByPostId(postId: number, take: number, skip: number) {
+    return this.commentsRepository
+      .createQueryBuilder('c1')
+      .select('c1.id, c1.comment, c1.user_id, c1.post_id, c1.parent_id')
+      .addSelect('COUNT(*)', 'count')
+      .leftJoin('c1.ChildComments', 'c2')
+      .where('c1.parentId is null')
+      .andWhere('c1.postId = :postId', { postId })
+      .groupBy('c1.id')
+      .take(take)
+      .skip(skip)
+      .getRawMany();
+  }
+
+  async findNestedComments(commentId: number, take: number, skip: number) {
+    return this.commentsRepository
+      .createQueryBuilder()
+      .where('parent_id = :commentId', { commentId })
+      .skip(skip)
+      .take(take)
+      .getMany();
   }
 
   async createComment(
@@ -67,7 +78,6 @@ export class CommentService {
       throw new ForbiddenException('권한이 없습니다.');
     }
     comment.comment = _comment.comment;
-    // comment.ParentCommentId = _comment.ParentCommentId;
     return await this.commentsRepository.save(comment);
   }
 
