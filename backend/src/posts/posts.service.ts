@@ -11,51 +11,43 @@ export class PostsService {
 
   //전체 게시판
   async findAll(take: number, skip: number) {
-    return Promise.all([this.pagination(take, skip), this.countPosts()]);
+    return this.pagination(take, skip);
   }
 
   //카테고리 별 게시판
   async findPostsByCategoryId(categoryId: number, take: number, skip: number) {
-    return Promise.all([
-      this.paginationByCategoryId(categoryId, take, skip),
-      this.countPostsWithCategoryId(categoryId),
-    ]);
+    return this.paginationByCategoryId(categoryId, take, skip);
   }
 
   async pagination(take: number, skip: number) {
     const posts = await this.postsRepository
       .createQueryBuilder('posts')
-      .orderBy('created_at', 'DESC')
-      .skip(skip)
+      .select(
+        'posts.id, posts.title, posts.content, posts.status, posts.categoryId, posts.userId, posts.categoryId, posts.createdAt, posts.updatedAt, posts.deletedAt , COUNT(*) AS commentCount',
+      )
+      .leftJoin('posts.PostComments', 'c')
+      .where('posts.status = :status', { status: 1 })
+      .groupBy('posts.id')
+      .orderBy('created_at', 'ASC')
       .take(take)
-      .getMany();
-
-    if (!posts) {
-      throw new NotFoundException('게시물이 존재하지 않습니다.');
-    }
+      .skip(skip)
+      .getRawMany();
     return posts;
   }
   async paginationByCategoryId(categoryId: number, take: number, skip: number) {
     const posts = await this.postsRepository
       .createQueryBuilder('posts')
-      .where('posts.categoryId = :categoryId', { categoryId })
-      .orderBy('created_at', 'DESC')
+      .select(
+        'posts.id, posts.title, posts.content, posts.status, posts.categoryId, posts.userId, posts.categoryId, posts.createdAt, posts.updatedAt, posts.deletedAt , COUNT(*) AS commentCount',
+      )
+      .leftJoin('posts.PostComments', 'c')
+      .where('posts.category_id = :categoryId', { categoryId })
+      .andWhere('posts.status = :status', { status: 1 })
+      .groupBy('posts.id')
+      .orderBy('created_at', 'ASC')
       .skip(skip)
       .take(take)
-      .getMany();
-    if (!posts) {
-      throw new NotFoundException('게시물이 존재하지 않습니다.');
-    }
+      .getRawMany();
     return posts;
-  }
-
-  async countPosts() {
-    return this.postsRepository.createQueryBuilder('posts').getCount();
-  }
-  async countPostsWithCategoryId(categoryId: number) {
-    return this.postsRepository
-      .createQueryBuilder('posts')
-      .where('posts.categoryId = :categoryId', { categoryId })
-      .getCount();
   }
 }

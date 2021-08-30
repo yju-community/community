@@ -14,6 +14,7 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { Posts } from 'src/entities/Posts';
+import { ResponsePostsDto } from './dto/response.posts.dto';
 import { PostsService } from './posts.service';
 
 @UseGuards(JwtAuthGuard)
@@ -26,7 +27,7 @@ export class PostsController {
   @ApiResponse({
     status: 200,
     description: '성공',
-    type: [Posts],
+    type: [ResponsePostsDto],
   })
   @ApiQuery({
     name: 'take',
@@ -48,7 +49,7 @@ export class PostsController {
   @ApiResponse({
     status: 200,
     description: '성공',
-    type: [Posts],
+    type: [ResponsePostsDto],
   })
   @ApiQuery({
     name: 'category',
