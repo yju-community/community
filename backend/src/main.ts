@@ -6,10 +6,14 @@ import { ValidationPipe } from '@nestjs/common';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { AppLoggingService } from './logger/AppLoggingService';
 
 declare const module: any;
+
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: new AppLoggingService(),
+  });
   const port = process.env.PORT || 3000;
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
