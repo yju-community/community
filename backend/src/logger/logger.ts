@@ -2,6 +2,7 @@ import winston from 'winston';
 import 'winston-daily-rotate-file';
 import { Logger, format } from 'winston';
 import fs from 'fs';
+import path from 'path';
 
 const { combine, timestamp, prettyPrint, colorize, errors, json, simple } =
   format;
@@ -34,11 +35,11 @@ const createLogger = () => {
     defaultMeta: { service: 'user-service' },
     transports: [
       new winston.transports.File({
-        filename: 'log/error/%DATA%error.log',
+        filename: `log/error/${Date.now()}error.log`,
         level: 'error',
       }),
       new winston.transports.File({
-        filename: 'log/info/%DATA%info.log',
+        filename: `log/info/${Date.now()}info.log`,
         level: 'info',
       }),
     ],

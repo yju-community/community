@@ -25,13 +25,15 @@ import { Dms } from './src/entities/Dms';
 import { Mentions } from './src/entities/Mentions';
 
 dotenv.config();
+
 const config: TypeOrmModuleOptions = {
   type: 'mysql',
   host: 'localhost',
   port: 3306,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  database:
+    process.env.NODE_ENV === 'test' ? 'testdb' : process.env.DB_DATABASE,
   entities: [
     Blacklists,
     Rooms,
@@ -60,7 +62,7 @@ const config: TypeOrmModuleOptions = {
   cli: { migrationsDir: 'src/migrations' },
   autoLoadEntities: true,
   charset: 'utf8mb4',
-  synchronize: false,
+  synchronize: true,
   logging: true,
   keepConnectionAlive: true,
   namingStrategy: new SnakeNamingStrategy(),

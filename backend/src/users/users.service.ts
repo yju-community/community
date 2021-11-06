@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CacheService } from 'src/cache/cache.service';
 import { Comments } from 'src/entities/Comments';
 import { Friends } from 'src/entities/Friends';
 import { Posts } from 'src/entities/Posts';
@@ -17,7 +16,6 @@ export class UsersService {
     @InjectRepository(Friends) private friendsRepository: Repository<Friends>,
     @InjectRepository(Comments)
     private commentsRepository: Repository<Comments>,
-    private readonly cacheService: CacheService,
   ) {}
 
   async findOrCreate(joinRequestUser: JoinRequestDto): Promise<Users> {
@@ -33,15 +31,10 @@ export class UsersService {
     });
   }
   async findOneById(id: string) {
-    const exUser = await this.cacheService.get(`user:${id}`);
-    if (exUser) {
-      return exUser;
-    }
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
-    await this.cacheService.set(`user:${id}`, user);
     return user;
   }
 
@@ -62,7 +55,6 @@ export class UsersService {
         id,
       },
     });
-    await this.cacheService.set(`user:${id}`, user);
     return user;
   }
 

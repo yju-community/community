@@ -10,6 +10,7 @@ import { PostLike } from 'src/entities/PostLike';
 import { Posts } from 'src/entities/Posts';
 import { Connection, Repository } from 'typeorm';
 import { RequestPostDto } from './dto/request.post.dto';
+import { promisify } from 'util';
 
 @Injectable()
 export class PostService {
@@ -31,6 +32,15 @@ export class PostService {
       throw new NotFoundException('게시물이 존재하지 않습니다.');
     }
     return post;
+  }
+
+  async responsePost(id: number) {
+    return await this.postsRepository
+      .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.Images', 'images')
+      .leftJoinAndSelect('posts.PostLikes', 'like')
+      .where('posts.id = :id', { id })
+      .getOne();
   }
 
   async createPost(_post: RequestPostDto, userId: string) {
@@ -139,6 +149,16 @@ export class PostService {
   }
 
   async addLike(id: number, userId: string) {
+    // const getSismember = promisify(client.sismember).bind(client);
+    // try {
+    //   await getSismember(`postlike:${id}`, userId);
+    //   client.SADD(`postlike:${id}`, userId);
+    //   return { message: '좋아요 성공' };
+    // } catch (err) {
+    //   console.error(err);
+    //   throw err;
+    // }
+
     const like = await this.postlikeRepository.findOne({
       where: {
         postId: id,
@@ -146,7 +166,7 @@ export class PostService {
       },
     });
     if (like) {
-      throw new NotFoundException('이미 이 게시글에 좋아요를 한 상태입니다.');
+      throw new ForbiddenException('이미 이 게시글에 좋아요를 한 상태입니다.');
     }
     return await this.postlikeRepository.save({
       userId: userId,
@@ -154,6 +174,18 @@ export class PostService {
     });
   }
   async removeLike(id: number, userId: string) {
+    // const getSismember = promisify(client.sismember).bind(client);
+    // try {
+    //   const isLiked = await getSismember(`postlike:${id}`, userId);
+    //   if (!isLiked) {
+    //     throw new ForbiddenException('좋아요를 누른 상태가 아닙니다.');
+    //   }
+    //   client.SREM(`postlike:${id}`, userId);
+    //   return { message: '좋아요 취소' };
+    // } catch (err) {
+    //   console.error(err);
+    //   throw err;
+    // }
     const like = await this.postlikeRepository.findOne({
       where: {
         postId: id,
@@ -161,7 +193,7 @@ export class PostService {
       },
     });
     if (!like) {
-      throw new NotFoundException('좋아요를 누른 상태가 아닙니다.');
+      throw new ForbiddenException('좋아요를 누른 상태가 아닙니다.');
     }
     return await this.postlikeRepository
       .createQueryBuilder()
